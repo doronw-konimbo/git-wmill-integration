@@ -30,7 +30,8 @@ jobs:
       - name: Push to Test Path
         # Maps local u/doronw to remote u/doronw_test
         run: |
-          mv u/doronw/* u/doronw/*_test
+          sudo apt-get install rename
+          rename 's/$/_test/' u/doronw/*/
           wmill sync push --includes "u/doronw/**" --yes
 
       - name: Run Webhook Test
