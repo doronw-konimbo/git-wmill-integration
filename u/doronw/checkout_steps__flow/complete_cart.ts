@@ -4,16 +4,18 @@ import * as wmill from "windmill-client";
  * @param {string} cartId - The Cart ID from flow state
  * @param {string} publishableKey - Medusa Publishable Key (pk_...)
  */
-export async function main(publishableKey: string) {
+export async function main(publishable_key) {
   const cartId = await wmill.getFlowUserState("created_cart_id") as string;
   const URL = `https://migrationtest-youleap-rms.youleap.com/store/carts/${cartId}/complete`;
+  const publishableKey = process.env.MEDUSA_PUBLIC_KEY 
+      || await wmill.getVariable("u/doronw/MEDUSA_PUBLIC_KEY");
   
   try {
     const response = await fetch(URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-publishable-api-key": publishableKey,
+        "x-publishable-api-key": publishable_key,
       },
     });
 

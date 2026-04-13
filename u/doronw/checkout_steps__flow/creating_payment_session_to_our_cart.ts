@@ -5,10 +5,11 @@ import * as wmill from "windmill-client";
  * @param {string} providerId - The payment provider ID (e.g., "pp_stripe_stripe" or "manual")
  */
 export async function main(
-  publishableKey: string,
-  providerId: string = "pp_system_default"
+  providerId: string = "pp_system_default",
+  publishable_key: string
 ) {
   const BASE_URL = "https://migrationtest-youleap-rms.youleap.com/store";
+   
   
   // 1. Retrieve the Cart ID from memory
   const cartId = await wmill.getFlowUserState("created_cart_id") as string;
@@ -24,7 +25,7 @@ export async function main(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-publishable-api-key": publishableKey
+        "x-publishable-api-key": publishable_key
       },
       body: JSON.stringify({
         cart_id: cartId
@@ -50,7 +51,7 @@ export async function main(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-publishable-api-key": publishableKey
+        "x-publishable-api-key": publishable_key
       },
       body: JSON.stringify({
         provider_id: providerId

@@ -1,7 +1,11 @@
 import * as wmill from "windmill-client";
 
-export async function main(publishable_key:string) {
+export async function main() {
   const MEDUSA_URL = "https://migrationtest-youleap-rms.youleap.com/store/products";
+  const publishable_key = process.env.MEDUSA_PUBLIC_KEY 
+    || await wmill.getVariable("u/doronw/MEDUSA_PUBLIC_KEY");
+
+  if (!publishable_key) throw new Error("MEDUSA_PUBLIC_KEY is missing!");
 
   try {
     const response = await fetch(MEDUSA_URL, {
@@ -40,7 +44,8 @@ export async function main(publishable_key:string) {
 
     return {
       success: true,
-      count: simplifiedProducts.length
+      count: simplifiedProducts.length,
+      "key": publishable_key
     };
 
   } catch (error) {

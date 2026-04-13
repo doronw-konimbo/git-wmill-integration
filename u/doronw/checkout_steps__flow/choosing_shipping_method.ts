@@ -3,7 +3,7 @@ import * as wmill from "windmill-client";
 /**
  * @param {string} publishableKey - Your Medusa Publishable Key (pk_...)
  */
-export async function main(publishableKey: string) {
+export async function main(publishable_key) {
   const BASE_URL = "https://migrationtest-youleap-rms.youleap.com/store";
   
   // 1. Retrieve the Cart ID from Windmill memory (saved in the previous step)
@@ -19,7 +19,7 @@ export async function main(publishableKey: string) {
     const optionsResponse = await fetch(`${BASE_URL}/shipping-options?cart_id=${cartId}`, {
       method: "GET",
       headers: {
-        "x-publishable-api-key": publishableKey
+        "x-publishable-api-key": publishable_key
       }
     });
 
@@ -39,7 +39,7 @@ export async function main(publishableKey: string) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-publishable-api-key": publishableKey
+        "x-publishable-api-key": publishable_key
       },
       body: JSON.stringify({
         option_id: selectedOptionId

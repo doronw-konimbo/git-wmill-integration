@@ -3,9 +3,13 @@ import * as wmill from "windmill-client";
 /**
  * @param {string[]} targetSkus - An array of SKUs to check (e.g. ["SHIRT-S", "HAT-01"])
  */
-export async function main(email, shipping_address, order: any[]) {
+export async function main(email, shipping_address, items: any[]) {
   // 1. Retrieve the JSON array saved in the previous step
   const products = await wmill.getFlowUserState("processed_products");
+
+  if (items === null){
+    throw new Error("No 'items' found in flow input. Ensure the flow input includes an 'items' array.");
+  }
 
   if (!products || !Array.isArray(products)) {
     throw new Error("No processed products found in flow state. Did the previous step run?");
@@ -18,7 +22,7 @@ export async function main(email, shipping_address, order: any[]) {
   };
 
   // 2. Loop through each SKU in your input array
-  for (const orderProduct of order) {
+  for (const orderProduct of items) {
     let matchFound = false;
 
     // 3. Search through the saved Medusa products

@@ -1,0 +1,40 @@
+name: Windmill Test & Deploy
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'u/doronw/**'
+
+jobs:
+  test-and-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Windmill CLI
+        run: npm install -g windmill-cli
+
+      - name: Add Remote Workspace
+        # We use 'instance add' because the npm version uses this syntax
+        run: |
+          wmill instance add remote https://workflow.retail-os.ai/ "${{ secrets.WMILL_TOKEN }}"
+
+      - name: Push to Test Path
+        # Maps local u/doronw to remote u/doronw_test
+        run: |
+          wmill sync push --include "u/doronw/creating_order_webhook__flow" --remote-path "u/doronw/webhook_test" --yes
+          wmill sync push --include "u/doronw/checkout_steps__flow" --remote-path "u/doronw/checkout_test" --yes
+
+      - name: Run Webhook Test
+        # Executes the flow/script located at the test path
+        # Adjust the --data JSON if your webhook requires specific inputs
+        run: |
+          echo "Executing test run for u/doronw/webhook_test..."
+          wmill flow run u/doronw/webhook_test

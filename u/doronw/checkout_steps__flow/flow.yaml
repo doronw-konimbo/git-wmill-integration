@@ -8,7 +8,7 @@ value:
         type: rawscript
         content: "!inline cart_creation.ts"
         input_transforms:
-          publishableKey:
+          publishable_key:
             type: javascript
             expr: flow_input.publishable_key
           regionId:
@@ -23,25 +23,14 @@ value:
       summary: choosing shipping method
       value:
         type: rawscript
-        content: "!inline choosing_shipping_method.ts"
-        input_transforms:
-          publishableKey:
-            type: javascript
-            expr: flow_input.publishable_key
-        lock: "!inline choosing_shipping_method.lock"
-        language: bun
-    - id: d
-      summary: creating payment session to our cart
-      value:
-        type: rawscript
         content: "!inline creating_payment_session_to_our_cart.ts"
         input_transforms:
+          publishable_key:
+            type: javascript
+            expr: flow_input.publishable_key
           providerId:
             type: static
             value: pp_system_default
-          publishableKey:
-            type: javascript
-            expr: flow_input.publishable_key
         lock: "!inline creating_payment_session_to_our_cart.lock"
         language: bun
     - id: e
@@ -50,7 +39,7 @@ value:
         type: rawscript
         content: "!inline complete_cart.ts"
         input_transforms:
-          publishableKey:
+          publishable_key:
             type: javascript
             expr: flow_input.publishable_key
         lock: "!inline complete_cart.lock"
@@ -63,11 +52,11 @@ schema:
     - publishable_key
     - regionId
   properties:
-    translatedData:
+    publishable_key:
       type: string
       description: ""
       default: ""
-    publishable_key:
+    translatedData:
       type: string
       description: ""
       default: ""

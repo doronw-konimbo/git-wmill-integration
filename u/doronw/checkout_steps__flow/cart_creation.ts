@@ -7,8 +7,8 @@ import * as wmill from "windmill-client";
  */
 export async function main(
   regionId: string,
-  publishableKey: string,
-  translatedData: any
+  translatedData: any,
+  publishable_key: string
 ) {
   const BASE_URL = "https://migrationtest-youleap-rms.youleap.com/store";
 
@@ -24,7 +24,7 @@ export async function main(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-publishable-api-key": publishableKey,
+        "x-publishable-api-key": publishable_key,
       },
       body: JSON.stringify({
         region_id: regionId,
@@ -62,7 +62,7 @@ export async function main(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-publishable-api-key": publishableKey,
+          "x-publishable-api-key": publishable_key,
         },
         body: JSON.stringify({
           variant_id: item.variant_id,

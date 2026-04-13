@@ -1,34 +1,33 @@
-summary: ''
-description: ''
+summary: New flow
+description: ""
 value:
   modules:
     - id: a
       summary: retrieve exists products variants
       value:
         type: rawscript
-        content: '!inline retrieve_exists_products_variants.ts'
+        content: "!inline retrieve_exists_products_variants.ts"
         input_transforms:
           publishable_key:
             type: javascript
             expr: flow_input.publishable_key
-        lock: '!inline retrieve_exists_products_variants.lock'
+        lock: "!inline retrieve_exists_products_variants.lock"
         language: bun
     - id: b
       summary: check if the product exist and translates the SKU
       value:
         type: rawscript
-        content: '!inline check_if_the_product_exist_and_translates_the_sku.ts'
+        content: "!inline check_if_the_product_exist_and_translates_the_sku.ts"
         input_transforms:
           email:
             type: javascript
             expr: flow_input.email
-          order:
+          items:
             type: javascript
             expr: flow_input.items
           shipping_address:
             type: javascript
             expr: flow_input.shipping_addres
-        lock: '!inline check_if_the_product_exist_and_translates_the_sku.lock'
         language: bun
     - id: c
       value:
@@ -36,17 +35,17 @@ value:
         input_transforms:
           publishable_key:
             type: javascript
-            value: ''
-            expr: flow_input.publishable_key
+            value: ""
+            expr: results.a["key"]
           regionId:
             type: javascript
-            value: ''
+            value: ""
             expr: flow_input.region_id
           translatedData:
             type: javascript
-            value: ''
+            value: ""
             expr: results.b
-        path: u/doronw/checkout_steps
+        path: u/doronw/checkout_test
       continue_on_error: false
 schema:
   $schema: https://json-schema.org/draft/2020-12/schema
@@ -56,43 +55,33 @@ schema:
     - shipping_addres
     - items
     - region_id
-    - publishable_key
   properties:
     email:
       type: string
-      description: ''
-      default: ''
-    items:
-      type: array
-      description: ''
-      default: [{"sku": "test3-red-s","quantity": 2},
-             {"sku": "test3-blue-l", "quantity": 1} ]
-      items:
-        type: string
-    publishable_key:
-      type: string
-      description: ''
-      default: |
-        pk_11be62cabd900406c3fe9c3864efc6de677ae3c8e280af477e2df15bb8e1da1b
-      nullable: false
-    region_id:
-      type: string
-      description: ''
-      default: reg_01KFDWA865WZJJS7RJQMDB2HDY
-      nullable: false
+      description: ""
+      default: doronw@konimbo.co.il
     shipping_addres:
       type: object
-      description: ''
-      default: |
-      {
-      
-          "first_name": "doron",
-          "last_name": "weiss",
-          "address_1": "shushan tzahor 4",
-          "postal_code": "11111",
-          "city": "tzoran",
-          "country_code": "il"
-      }
-  required:
-    - region_id
-    - publishable_key
+      description: ""
+      default:
+        first_name: doron
+        last_name: weiss
+        address_1: shushan tzahor 4
+        postal_code: "11111"
+        city: tzoran
+        country_code: il
+    items:
+      type: array
+      description: ""
+      default:
+        - sku: test3-red-s
+          quantity: 2
+        - sku: test3-blue-l
+          quantity: 1
+    region_id:
+      type: string
+      description: ""
+      default: reg_01KFDWA865WZJJS7RJQMDB2HDY
+      nullable: false
+
+  
