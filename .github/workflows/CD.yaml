@@ -1,5 +1,5 @@
 name: Windmill Test & Deploy, add
-
+# another change: 1
 on:
   push:
     branches: [ main ]
@@ -30,8 +30,8 @@ jobs:
       - name: Push to Test Path
         # Maps local u/doronw to remote u/doronw_test
         run: |
-          wmill sync push --includes "u/doronw/creating_order_webhook__flow" --remote-path "u/doronw/webhook_test" --yes
-          wmill sync push --includes "u/doronw/checkout_steps__flow" --remote-path "u/doronw/checkout_test" --yes
+          mv u/doronw/* u/doronw/*_test
+          wmill sync push --includes "u/doronw/**" --yes
 
       - name: Run Webhook Test
         # Executes the flow/script located at the test path

@@ -45,7 +45,7 @@ value:
             type: javascript
             value: ""
             expr: results.b
-        path: u/doronw/checkout_test
+        path: u/doronw/checkout_steps_test
       continue_on_error: false
 schema:
   $schema: https://json-schema.org/draft/2020-12/schema
