@@ -1,0 +1,78 @@
+summary: New flow
+description: ""
+value:
+  modules:
+    - id: a
+      summary: cart creation
+      value:
+        type: rawscript
+        content: "!inline cart_creation.ts"
+        input_transforms:
+          publishableKey:
+            type: javascript
+            expr: flow_input.publishable_key
+          regionId:
+            type: javascript
+            expr: flow_input.regionId
+          translatedData:
+            type: javascript
+            expr: flow_input.translatedData
+        lock: "!inline cart_creation.lock"
+        language: bun
+    - id: c
+      summary: choosing shipping method
+      value:
+        type: rawscript
+        content: "!inline choosing_shipping_method.ts"
+        input_transforms:
+          publishableKey:
+            type: javascript
+            expr: flow_input.publishable_key
+        lock: "!inline choosing_shipping_method.lock"
+        language: bun
+    - id: d
+      summary: creating payment session to our cart
+      value:
+        type: rawscript
+        content: "!inline creating_payment_session_to_our_cart.ts"
+        input_transforms:
+          providerId:
+            type: static
+            value: pp_system_default
+          publishableKey:
+            type: javascript
+            expr: flow_input.publishable_key
+        lock: "!inline creating_payment_session_to_our_cart.lock"
+        language: bun
+    - id: e
+      summary: complete cart
+      value:
+        type: rawscript
+        content: "!inline complete_cart.ts"
+        input_transforms:
+          publishableKey:
+            type: javascript
+            expr: flow_input.publishable_key
+        lock: "!inline complete_cart.lock"
+        language: bun
+schema:
+  $schema: https://json-schema.org/draft/2020-12/schema
+  type: object
+  order:
+    - translatedData
+    - publishable_key
+    - regionId
+  properties:
+    translatedData:
+      type: string
+      description: ""
+      default: ""
+    publishable_key:
+      type: string
+      description: ""
+      default: ""
+    regionId:
+      type: string
+      description: ""
+      default: ""
+  required: []

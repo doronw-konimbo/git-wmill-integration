@@ -1,0 +1,32 @@
+# Windmill Specific
+.wmill/config.yaml
+.wmill/credentials
+*.lock
+wmill-lock.yaml
+
+# Secrets and Environment Variables
+.env
+.env.*
+!.env.example
+
+# Node.js / Bun
+node_modules/
+dist/
+build/
+.npm
+*.log
+
+# Deno
+.deno/
+deno.lock
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS & Editors
+.DS_Store
+Thumbs.db
+.vscode/

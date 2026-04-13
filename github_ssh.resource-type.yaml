@@ -1,0 +1,12 @@
+description: ''
+format_extension: txt
+schema:
+  $schema: https://json-schema.org/draft/2020-12/schema
+  type: object
+  order:
+    - content
+  properties:
+    content:
+      type: string
+      description: Text contents of the file
+  required: []
