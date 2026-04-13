@@ -1,4 +1,4 @@
-name: Windmill Test & Deploy
+name: Windmill Test & Deploy, add
 
 on:
   push:
