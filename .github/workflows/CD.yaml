@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'u/doronw/**'
+      - '.github/workflows/CD.yaml'
 
 jobs:
   test-and-sync:
@@ -29,8 +30,8 @@ jobs:
       - name: Push to Test Path
         # Maps local u/doronw to remote u/doronw_test
         run: |
-          wmill sync push --include "u/doronw/creating_order_webhook__flow" --remote-path "u/doronw/webhook_test" --yes
-          wmill sync push --include "u/doronw/checkout_steps__flow" --remote-path "u/doronw/checkout_test" --yes
+          wmill sync push --includes "u/doronw/creating_order_webhook__flow" --remote-path "u/doronw/webhook_test" --yes
+          wmill sync push --includes "u/doronw/checkout_steps__flow" --remote-path "u/doronw/checkout_test" --yes
 
       - name: Run Webhook Test
         # Executes the flow/script located at the test path
