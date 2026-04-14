@@ -28,15 +28,10 @@ jobs:
       - name: Install Windmill CLI
         run: npm install -g windmill-cli
 
-      - name: Add Remote Workspace
-        # We use 'instance add' because the npm version uses this syntax
-        run: |
-          wmill instance add remote https://workflow.retail-os.ai/ "${{ env.WMILL_TOKEN }}"
-
       - name: Push to Test Path
         # Maps local u/doronw to remote u/doronw_test
         run: |
-          wmill sync push --includes "u/doronw/creating_order_webhook_test,u/doronw/checkout_steps_test" --token "${{ env.WMILL_TOKEN }}" --yes
+          wmill sync push --includes "u/doronw/creating_order_webhook_test,u/doronw/checkout_steps_test" --token "${{ env.WMILL_TOKEN }}" --base-url https://workflow.retail-os.ai/ --workspace retailos --yes
 
       - name: Run Webhook Test
         # Executes the flow/script located at the test path
