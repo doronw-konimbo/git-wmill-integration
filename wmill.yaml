@@ -7,7 +7,7 @@ defaultTs: bun                  # bun or deno
 
 # Glob patterns for files to include in sync
 includes: 
-  - "f/**"           # use ** for all, f/** for folder-scoped
+  - "u/doronw/**"           # use ** for all, f/** for folder-scoped
 
 # Additional glob patterns merged with includes (useful in workspace overrides)
 # extraIncludes: []
@@ -122,7 +122,8 @@ codebases: []
 workspaces:
   dw-konimbo:
     baseUrl: https://workflow.retail-os.ai/
-    workspaceId: retailos                      # windmill workspace id (defaults to key name)
+    workspaceId: retailos 
+    gitBranch: main                     # windmill workspace id (defaults to key name)
     # overrides:                           # override top-level sync options for this workspace
     #   skipSecrets: false
     #   includeSchedules: true

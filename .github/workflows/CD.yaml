@@ -6,6 +6,12 @@ on:
     paths:
       - 'u/doronw/**'
       - '.github/workflows/CD.yaml'
+env:
+  WMILL_TOKEN: ${{ secrets.WMILL_TOKEN }}
+  EMAIL: ${{ vars.EMAIL }}
+  SHIPPING_ADDRESS: ${{ vars.SHIPPING_ADDRESS }}
+  ITEMS: ${{ vars.ITEMS }}
+  REGION_ID: ${{ vars.REGION_ID }}
 
 jobs:
   test-and-sync:
@@ -25,18 +31,16 @@ jobs:
       - name: Add Remote Workspace
         # We use 'instance add' because the npm version uses this syntax
         run: |
-          wmill instance add remote https://workflow.retail-os.ai/ "${{ secrets.WMILL_TOKEN }}"
+          wmill instance add remote https://workflow.retail-os.ai/ "${{ env.WMILL_TOKEN }}"
 
       - name: Push to Test Path
         # Maps local u/doronw to remote u/doronw_test
         run: |
-          sudo apt-get install rename
-          rename 's/$/_test/' u/doronw/*/
-          wmill sync push --includes "u/doronw/**" --yes
+          wmill sync push --includes "u/doronw/creating_order_webhook_test,u/doronw/checkout_steps_test" --token "${{ env.WMILL_TOKEN }}" --yes
 
       - name: Run Webhook Test
         # Executes the flow/script located at the test path
         # Adjust the --data JSON if your webhook requires specific inputs
         run: |
           echo "Executing test run for u/doronw/webhook_test..."
-          wmill flow run u/doronw/webhook_test
+          wmill flow run creating_order_webhook_test --data '{"email": "${{ env.EMAIL }}", "shipping_addres": ${SHIPPING_ADDRESS}, "items": ${ITEMS}, "region_id": "${{ env.REGION_ID }}"}'

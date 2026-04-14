@@ -19,6 +19,19 @@ value:
             expr: flow_input.translatedData
         lock: "!inline cart_creation.lock"
         language: bun
+
+    - id: b
+      summary: choosing shipping method
+      value:
+        type: rawscript
+        content: "!inline choosing_shipping_method.ts"
+        input_transforms:
+          publishable_key:
+            type: javascript
+            expr: flow_input.publishable_key
+        lock: "!inline choosing_shipping_method.lock"
+        language: bun
+
     - id: c
       summary: choosing shipping method
       value:
@@ -33,6 +46,7 @@ value:
             value: pp_system_default
         lock: "!inline creating_payment_session_to_our_cart.lock"
         language: bun
+        
     - id: e
       summary: complete cart
       value:
