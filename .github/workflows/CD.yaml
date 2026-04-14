@@ -12,6 +12,8 @@ env:
   SHIPPING_ADDRESS: ${{ vars.SHIPPING_ADDRESS }}
   ITEMS: ${{ vars.ITEMS }}
   REGION_ID: ${{ vars.REGION_ID }}
+  BASE_URL: https://workflow.retail-os.ai/
+  WORKSPACE: retailos
 
 jobs:
   test-and-sync:
@@ -31,11 +33,18 @@ jobs:
       - name: Push to Test Path
         # Maps local u/doronw to remote u/doronw_test
         run: |
-          wmill sync push --includes "u/doronw/creating_order_webhook_test,u/doronw/checkout_steps_test" --token "${{ env.WMILL_TOKEN }}" --base-url https://workflow.retail-os.ai/ --workspace retailos --yes
+          wmill sync push --includes "u/doronw/creating_order_webhook_test,u/doronw/checkout_steps_test" --token "${{ env.WMILL_TOKEN }}" --base-url "${{ env.BASE_URL }}" --workspace "${{ env.WORKSPACE }}" --yes
 
       - name: Run Webhook Test
         # Executes the flow/script located at the test path
         # Adjust the --data JSON if your webhook requires specific inputs
         run: |
           echo "Executing test run for u/doronw/webhook_test..."
-          wmill flow run creating_order_webhook_test --data '{"email": "${{ env.EMAIL }}", "shipping_addres": ${SHIPPING_ADDRESS}, "items": ${ITEMS}, "region_id": "${{ env.REGION_ID }}"}'
+          wmill flow run creating_order_webhook_test --data "${{ env.DATA }}" --token "${{ env.WMILL_TOKEN }}" --base-url "${{ env.BASE_URL }}" --workspace "${{ env.WORKSPACE }}" --yes
+        env:
+          DATA:
+            email: ${{ env.EMAIL }}
+            shipping_address: ${{ env.SHIPPING_ADDRESS }}
+            items: ${{ env.ITEMS }}
+            region_id: ${{ env.REGION_ID }}
+          
