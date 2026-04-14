@@ -40,5 +40,5 @@ jobs:
         # Adjust the --data JSON if your webhook requires specific inputs
         run: |
           echo "Executing test run for u/doronw/webhook_test..."
-          wmill flow run creating_order_webhook_test --data '{ "email": "${{ env.EMAIL }}", "shipping_address": "${{ env.SHIPPING_ADDRESS }}", "items": "${{ env.ITEMS }}", "region_id": "${{ env.REGION_ID }}" }' --token "${{ env.WMILL_TOKEN }}" --base-url "${{ env.BASE_URL }}" --workspace "${{ env.WORKSPACE }}"
+          wmill flow run creating_order_webhook_test --data '{ "email": "${{ env.EMAIL }}", "shipping_address": ${{ env.SHIPPING_ADDRESS }}, "items": ${{ env.ITEMS }}, "region_id": "${{ env.REGION_ID }}" }' --token "${{ env.WMILL_TOKEN }}" --base-url "${{ env.BASE_URL }}" --workspace "${{ env.WORKSPACE }}"
           
