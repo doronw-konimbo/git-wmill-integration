@@ -9,8 +9,8 @@ on:
 env:
   WMILL_TOKEN: ${{ secrets.WMILL_TOKEN }}
   EMAIL: ${{ vars.EMAIL }}
-  SHIPPING_ADDRESS: {"first_name": "doron", "last_name": "weiss", "address_1": "shushan tzahor 4", "postal_code": "11111", "city": "tzoran", "country_code": "il"}
-  ITEMS: [{"sku": "test3-red-s","quantity": 2},{"sku": "test3-blue-l","quantity": 1}]
+  SHIPPING_ADDRESS: '{"first_name": "doron", "last_name": "weiss", "address_1": "shushan tzahor 4", "postal_code": "11111", "city": "tzoran", "country_code": "il"}'
+  ITEMS: '[{"sku": "test3-red-s","quantity": 2},{"sku": "test3-blue-l","quantity": 1}]'
   REGION_ID: ${{ vars.REGION_ID }}
   BASE_URL: https://workflow.retail-os.ai/
   WORKSPACE: retailos
