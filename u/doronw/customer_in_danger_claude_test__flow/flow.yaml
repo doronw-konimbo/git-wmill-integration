@@ -1,0 +1,79 @@
+summary: Customer in Danger Flow
+description: "Handles incoming webhook for customers in danger or with special orders. Validates the payload, creates a pipe record in Airtable, and generates 3 task records linked to that pipe."
+value:
+  modules:
+    - id: a
+      summary: parse and validate webhook payload
+      value:
+        type: rawscript
+        content: "!inline parse_webhook_payload.ts"
+        input_transforms:
+          airtable_base_id:
+            type: javascript
+            expr: flow_input.airtable_base_id
+          customer_name:
+            type: javascript
+            expr: flow_input.customer_name
+          opened_by:
+            type: javascript
+            expr: flow_input.opened_by
+        lock: "!inline parse_webhook_payload.lock"
+        language: bun
+
+    - id: b
+      summary: create airtable pipe record
+      value:
+        type: rawscript
+        content: "!inline create_airtable_pipe_record.ts"
+        input_transforms:
+          airtable_base_id:
+            type: javascript
+            expr: flow_input.airtable_base_id
+          customer_name:
+            type: javascript
+            expr: flow_input.customer_name
+          opened_by:
+            type: javascript
+            expr: flow_input.opened_by
+        lock: "!inline create_airtable_pipe_record.lock"
+        language: bun
+
+    - id: c
+      summary: create airtable task records
+      value:
+        type: rawscript
+        content: "!inline create_airtable_task_records.ts"
+        input_transforms:
+          airtable_base_id:
+            type: javascript
+            expr: flow_input.airtable_base_id
+          customer_name:
+            type: javascript
+            expr: flow_input.customer_name
+        lock: "!inline create_airtable_task_records.lock"
+        language: bun
+
+schema:
+  $schema: https://json-schema.org/draft/2020-12/schema
+  type: object
+  order:
+    - airtable_base_id
+    - customer_name
+    - opened_by
+  properties:
+    airtable_base_id:
+      type: string
+      description: "Airtable Base ID (sent with webhook, starts with 'app...')"
+      default: ""
+    customer_name:
+      type: string
+      description: "Name of the customer in question"
+      default: ""
+    opened_by:
+      type: string
+      description: "Name of the person who opened the pipe"
+      default: ""
+  required:
+    - airtable_base_id
+    - customer_name
+    - opened_by
