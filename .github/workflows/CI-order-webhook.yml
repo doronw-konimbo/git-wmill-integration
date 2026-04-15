@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'u/doronw/**'
-      - '.github/workflows/CD.yaml'
+      - '.github/workflows/CI-order-webhook.yml'
 env:
   WMILL_TOKEN: ${{ secrets.WMILL_TOKEN }}
   EMAIL: ${{ vars.EMAIL }}

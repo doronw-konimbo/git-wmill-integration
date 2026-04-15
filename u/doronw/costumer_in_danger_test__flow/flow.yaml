@@ -1,0 +1,47 @@
+summary: Customer in Danger Flow
+description: 'Triggered by webhook with a Pipedrive deal_id. Step A fetches the deal from Pipedrive and validates it. Step B pushes the key deal sections to Airtable.'
+value:
+  modules:
+    - id: a
+      summary: fetch deal from Pipedrive
+      value:
+        type: rawscript
+        content: '!inline a.ts'
+        input_transforms:
+          deal_id:
+            type: javascript
+            expr: flow_input.deal_id
+          pipedrive_token:
+            type: static
+            value: $var:u/doronw/pipedrive_token
+        lock: '!inline a.lock'
+        language: bun
+    - id: b
+      summary: push deal sections to Airtable
+      value:
+        type: rawscript
+        content: '!inline b.ts'
+        input_transforms:
+          airtable_token:
+            type: static
+            value: $var:u/doronw/airtable_token
+          deal_id:
+            type: javascript
+            expr: results.a.deal_id
+          deal:
+            type: javascript
+            expr: results.a.deal
+        lock: '!inline b.lock'
+        language: bun
+schema:
+  $schema: https://json-schema.org/draft/2020-12/schema
+  type: object
+  order:
+    - deal_id
+  properties:
+    deal_id:
+      type: string
+      description: 'Pipedrive deal ID sent by the webhook'
+      default: ''
+  required:
+    - deal_id

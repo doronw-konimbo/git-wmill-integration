@@ -1,0 +1,40 @@
+name: Windmill Deploy & Test - Customer in Danger
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'u/doronw/customer_in_danger_test**'
+      - '.github/workflows/CI-indanger.yml'
+
+env:
+  WMILL_TOKEN: ${{ secrets.WMILL_TOKEN }}
+  BASE_URL: https://workflow.retail-os.ai/
+  WORKSPACE: retailos
+  PM: ${{ vars.PM }}
+  CONTACT: ${{ vars.CONTACT }}
+  PHONE: ${{ vars.PHONE }}
+  CAUSE: ${{ vars.CAUSE }}
+
+jobs:
+  test-and-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Windmill CLI
+        run: npm install -g windmill-cli
+
+      - name: Push to Windmill
+        run: |
+          wmill sync push --includes "u/doronw/customer_in_danger_test" --token "${{ env.WMILL_TOKEN }}" --base-url "${{ env.BASE_URL }}" --workspace "${{ env.WORKSPACE }}" --yes
+
+      - name: Run Flow Test
+        run: |
+          echo "Executing test run for u/doronw/customer_in_danger_test..."
+          wmill flow run u/doronw/customer_in_danger_test --data '{"pm":"${{ env.PM }}","contact":"${{ env.CONTACT }}","phone_number":"${{ env.PHONE }}","cause":"${{ env.CAUSE }}"}' --token "${{ env.WMILL_TOKEN }}" --base-url "${{ env.BASE_URL }}" --workspace "${{ env.WORKSPACE }}"
