@@ -1,19 +1,31 @@
 summary: Customer in Danger Flow
-description: 'Triggered by webhook with a Pipedrive deal_id. Step A fetches the deal from Pipedrive and validates it. Step B pushes the key deal sections to Airtable.'
+description: 'Two paths: if deal_id is provided, fetches deal from Pipedrive. Otherwise uses manually supplied fields. Step B pushes the result to Airtable.'
 value:
   modules:
     - id: a
-      summary: fetch deal from Pipedrive
+      summary: fetch deal from Pipedrive or use manual fields
       value:
         type: rawscript
         content: '!inline a.ts'
         input_transforms:
-          deal_id:
-            type: javascript
-            expr: flow_input.deal_id
           pipedrive_token:
             type: static
             value: $var:u/doronw/pipedrive_token
+          deal_id:
+            type: javascript
+            expr: flow_input.deal_id
+          pm:
+            type: javascript
+            expr: flow_input.pm
+          contact:
+            type: javascript
+            expr: flow_input.contact
+          phone_number:
+            type: javascript
+            expr: flow_input.phone_number
+          cause:
+            type: javascript
+            expr: flow_input.cause
         lock: '!inline a.lock'
         language: bun
     - id: b
@@ -38,10 +50,29 @@ schema:
   type: object
   order:
     - deal_id
+    - pm
+    - contact
+    - phone_number
+    - cause
   properties:
     deal_id:
       type: string
-      description: 'Pipedrive deal ID sent by the webhook'
+      description: 'Pipedrive deal ID (optional — leave empty to use manual fields)'
       default: ''
-  required:
-    - deal_id
+    pm:
+      type: string
+      description: 'Project manager (manual path only)'
+      default: ''
+    contact:
+      type: string
+      description: 'Customer contact name (manual path only)'
+      default: ''
+    phone_number:
+      type: string
+      description: 'Customer phone number (manual path only)'
+      default: ''
+    cause:
+      type: string
+      description: 'Cause / reason (manual path only)'
+      default: ''
+  required: []
